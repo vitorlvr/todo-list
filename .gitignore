@@ -1,0 +1,4 @@
+# Ignorar todos os arquivos de um diretório
+node_modules/
+README.md
+```
