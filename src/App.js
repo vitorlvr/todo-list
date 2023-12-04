@@ -3,7 +3,7 @@ import './App.css';
 import { useState, useEffect } from "react";
 import { BsTrash, BsBookmarkCheck, BsBookmarkCheckFill } from "react-icons/bs";
 
-const API = "http://localhost:3000";
+const API = "http://localhost:5000";
 
 function App() {
   const [title, setTitle] = useState("");
@@ -54,11 +54,20 @@ function App() {
   };
 
   const handleDelete = async (id) => {
-    await fetch(API + "/todos/" + id, {
-      method: "DELETE",
-    });
-
-    setTodos((prevState) => prevState.filter((todo) => todo.id !== id));
+    try {
+      if (!id || typeof id !== "string" || !id.match(/^[0-9a-fA-F]{24}$/)) {
+        console.error("ID inválido");
+        return;
+      }
+  
+      await fetch(`${API}/todos/${id}`, {
+        method: "DELETE",
+      });
+  
+      setTodos((prevState) => prevState.filter((todo) => todo.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleEdit = async (todo) => {
