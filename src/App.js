@@ -33,7 +33,7 @@ function App() {
     e.preventDefault();
 
     const todo = {
-      id: Date.now(),
+      _id: Date.now().toString(),
       title,
       time,
       done: false,
@@ -53,18 +53,13 @@ function App() {
     setTime("");
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (_id) => {
     try {
-      if (!id || typeof id !== "string" || !id.match(/^[0-9a-fA-F]{24}$/)) {
-        console.error("ID inválido");
-        return;
-      }
-  
-      await fetch(`${API}/todos/${id}`, {
+      await fetch(`${API}/todos/${_id}`, {
         method: "DELETE",
       });
   
-      setTodos((prevState) => prevState.filter((todo) => todo.id !== id));
+      setTodos((prevState) => prevState.filter((todo) => todo._id !== _id));
     } catch (error) {
       console.error(error);
     }
@@ -74,7 +69,7 @@ function App() {
     todo.done = !todo.done;
 
     try {
-      await fetch(API + "/todos/" + todo.id, {
+      await fetch(API + "/todos/" + todo._id, {
         method: "PUT",
         body: JSON.stringify(todo),
         headers: {
@@ -83,7 +78,7 @@ function App() {
       });
 
       setTodos((prevState) =>
-        prevState.map((t) => (t.id === todo.id ? todo : t))
+        prevState.map((t) => (t._id === todo._id ? todo : t))
       );
     } catch (err) {
       console.error(err);
@@ -131,14 +126,14 @@ function App() {
         <h2>Lista de tarefas:</h2>
         {todos.length === 0 && <p>Não há tarefas!</p>}
         {todos.map((todo) => (
-          <div className="todo" key={todo.id}>
+          <div className="todo" key={todo._id}>
             <h3 className={todo.done ? "todo-done" : ""}>{todo.title}</h3>
             <p>Duração: {todo.time}</p>
             <div className="actions">
               <span onClick={() => handleEdit(todo)}>
                 {todo.done ? <BsBookmarkCheck /> : <BsBookmarkCheckFill />}
               </span>
-              <BsTrash onClick={() => handleDelete(todo.id)} />
+              <BsTrash onClick={() => handleDelete(todo._id)} />
             </div>
           </div>
         ))}

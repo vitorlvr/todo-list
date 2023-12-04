@@ -24,12 +24,12 @@ app.post('/todos', async (req, res) => {
   res.json(newTask);
 });
 
-app.put('/todos/:id', async (req, res) => {
-  const { id } = req.params;
+app.put('/todos/:_id', async (req, res) => {
+  const { _id } = req.params;
   const { done } = req.body;
 
   try {
-    const updatedTask = await Task.findByIdAndUpdate(id, { done }, { new: true });
+    const updatedTask = await Task.findByIdAndUpdate(_id, { done }, { new: true });
     res.json(updatedTask);
   } catch (error) {
     console.error(error);
@@ -37,11 +37,11 @@ app.put('/todos/:id', async (req, res) => {
   }
 });
 
-app.delete('/todos/:id', async (req, res) => {
-  const { id } = req.params;
+app.delete('/todos/:_id', async (req, res) => {
+  const { _id } = req.params;
 
   try {
-    const deletedTask = await Task.findByIdAndDelete(id);
+    const deletedTask = await Task.findByIdAndDelete(_id);
     
     if (!deletedTask) {
       return res.status(404).json({ error: 'Task não encontrada' });
